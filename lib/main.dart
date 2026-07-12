@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medscan_flutter/screen/landing_screen.dart';
+import 'package:medscan_flutter/screen/login_screen.dart';
 
 void main() {
   runApp(const MedScanApp());
@@ -20,7 +22,7 @@ class MedScanApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const DashboardScreen(),
+      home: LandingScreen(),
     );
   }
 }
@@ -44,7 +46,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         title: Row(
           children: [
-            const Icon(Icons.health_and_safety, color: Color(0xFF0066CC), size: 28),
+            const Icon(
+              Icons.health_and_safety,
+              color: Color(0xFF0066CC),
+              size: 28,
+            ),
             const SizedBox(width: 8),
             Text(
               'MedScan AI',
@@ -61,9 +67,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
             padding: const EdgeInsets.only(right: 12.0),
             child: SegmentedButton<String>(
               segments: const [
-                ButtonSegment(value: 'EN', label: Text('EN', style: TextStyle(fontSize: 12))),
-                ButtonSegment(value: 'SI', label: Text('සිං', style: TextStyle(fontSize: 12))),
-                ButtonSegment(value: 'TA', label: Text('த', style: TextStyle(fontSize: 12))),
+                ButtonSegment(
+                  value: 'EN',
+                  label: Text('EN', style: TextStyle(fontSize: 12)),
+                ),
+                ButtonSegment(
+                  value: 'SI',
+                  label: Text('සිං', style: TextStyle(fontSize: 12)),
+                ),
+                ButtonSegment(
+                  value: 'TA',
+                  label: Text('த', style: TextStyle(fontSize: 12)),
+                ),
               ],
               selected: {selectedLanguage},
               onSelectionChanged: (Set<String> newSelection) {
@@ -89,8 +104,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               selectedLanguage == 'SI'
                   ? 'ආයුබෝවන්, අමල්!'
                   : selectedLanguage == 'TA'
-                      ? 'வணக்கம், அமல்!'
-                      : 'Hello, Amal!',
+                  ? 'வணக்கம், அமல்!'
+                  : 'Hello, Amal!',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
@@ -98,8 +113,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               selectedLanguage == 'SI'
                   ? 'ඔබේ ඖෂධ කාලසටහන සක්‍රියයි'
                   : selectedLanguage == 'TA'
-                      ? 'உங்கள் மருந்து அட்டவணை செயலில் உள்ளது'
-                      : 'Your medication routine is on track',
+                  ? 'உங்கள் மருந்து அட்டவணை செயலில் உள்ளது'
+                  : 'Your medication routine is on track',
               style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
             ),
             const SizedBox(height: 20),
@@ -121,7 +136,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       color: const Color(0xFF0066CC),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.alarm, color: Colors.white, size: 28),
+                    child: const Icon(
+                      Icons.alarm,
+                      color: Colors.white,
+                      size: 28,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -140,12 +159,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SizedBox(height: 2),
                         const Text(
                           'Amoxicillin - 500mg',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           'Take 1 capsule after lunch with water.',
-                          style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade700,
+                          ),
                         ),
                       ],
                     ),
@@ -172,7 +197,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: const Color(0xFF0066CC),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Camera scanner opening...')),
+                        const SnackBar(
+                          content: Text('Camera scanner opening...'),
+                        ),
                       );
                     },
                   ),
@@ -187,7 +214,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: const Color(0xFF00A86B),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Schedule feature coming next!')),
+                        const SnackBar(
+                          content: Text('Schedule feature coming next!'),
+                        ),
                       );
                     },
                   ),
@@ -204,10 +233,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   'Recent Scans',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text('View All'),
-                ),
+                TextButton(onPressed: () {}, child: const Text('View All')),
               ],
             ),
             const SizedBox(height: 8),
@@ -269,7 +295,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 16),
               Text(
                 title,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
@@ -302,7 +331,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           backgroundColor: statusColor.withAlpha(25),
           child: Icon(Icons.medication, color: statusColor, size: 20),
         ),
-        title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        title: Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
         subtitle: Text('$type\n$time', style: const TextStyle(fontSize: 11)),
         isThreeLine: true,
         trailing: const Icon(Icons.chevron_right, color: Colors.grey),
