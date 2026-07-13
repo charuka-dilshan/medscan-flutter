@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medscan_flutter/screen/dashboard_screen.dart';
 import 'package:medscan_flutter/screen/medical_info_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -137,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => MedicalInfoScreen()),
+                      MaterialPageRoute(builder: (_) => DashboardScreen()),
                     ),
                     child: Container(
                       width: double.infinity,
