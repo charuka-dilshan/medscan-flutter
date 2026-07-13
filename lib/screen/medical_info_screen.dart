@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_pill_card.dart';
+import 'profile_screen.dart';
 
 class MedicalInfoScreen extends StatefulWidget {
   const MedicalInfoScreen({super.key});
@@ -24,7 +25,10 @@ class _MedicalInfoScreenState extends State<MedicalInfoScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
-        title: const Text("Create Account", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Create Account",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: const Color(0xFF1E293B),
@@ -35,44 +39,136 @@ class _MedicalInfoScreenState extends State<MedicalInfoScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. Personal Information
-            const Text("Profile Details", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              "Profile Details",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 15),
             _buildTextField("Full Name", _nameController, Icons.person_outline),
-            _buildTextField("Mobile Number", _phoneController, Icons.phone_android),
-            _buildTextField("Set Password", _passwordController, Icons.lock_outline, isPassword: true),
+            _buildTextField(
+              "Mobile Number",
+              _phoneController,
+              Icons.phone_android,
+            ),
+            _buildTextField(
+              "Set Password",
+              _passwordController,
+              Icons.lock_outline,
+              isPassword: true,
+            ),
 
             const SizedBox(height: 30),
-            
+
             // 2. Measurements
-            const Text("Measurements", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              "Measurements",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 15),
-            _buildTextField("Weight (kg)", _weightController, Icons.monitor_weight_outlined),
-            _buildTextField("Height (cm)", _heightController, Icons.height_outlined),
+            _buildTextField(
+              "Weight (kg)",
+              _weightController,
+              Icons.monitor_weight_outlined,
+            ),
+            _buildTextField(
+              "Height (cm)",
+              _heightController,
+              Icons.height_outlined,
+            ),
 
             const SizedBox(height: 30),
-            
+
             // 3. Chronic Conditions
-            const Text("Chronic Conditions", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text(
+              "Chronic Conditions",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 15),
-            CustomPillCard(label: "Diabetes", isSelected: hasDiabetes, onTap: () => setState(() => hasDiabetes = !hasDiabetes)),
-            CustomPillCard(label: "High Blood Pressure", isSelected: hasHypertension, onTap: () => setState(() => hasHypertension = !hasHypertension)),
+            CustomPillCard(
+              label: "Diabetes",
+              isSelected: hasDiabetes,
+              onTap: () => setState(() => hasDiabetes = !hasDiabetes),
+            ),
+            CustomPillCard(
+              label: "High Blood Pressure",
+              isSelected: hasHypertension,
+              onTap: () => setState(() => hasHypertension = !hasHypertension),
+            ),
 
             const SizedBox(height: 50),
-            
+
             // Registration Button
             GestureDetector(
               onTap: () {
-                // Here you would call your Registration API/Database logic
-                print("Registering: ${_nameController.text}, ${_phoneController.text}");
+                final String name = _nameController.text.trim();
+                final String phone = _phoneController.text.trim();
+                final String password = _passwordController.text.trim();
+                final String weight = _weightController.text.trim();
+                final String height = _heightController.text.trim();
+
+                if (name.isEmpty ||
+                    phone.isEmpty ||
+                    password.isEmpty ||
+                    weight.isEmpty ||
+                    height.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Please complete all required fields"),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                  return;
+                }
+
+                final List<String> selectedConditions = [];
+
+                if (hasDiabetes) {
+                  selectedConditions.add("Diabetes");
+                }
+
+                if (hasHypertension) {
+                  selectedConditions.add("High Blood Pressure");
+                }
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(
+                      fullName: name,
+                      mobileNumber: phone,
+                      weight: weight,
+                      height: height,
+                      chronicConditions: selectedConditions,
+                    ),
+                  ),
+                );
               },
               child: Container(
-                width: double.infinity, height: 65,
+                width: double.infinity,
+                height: 65,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Color(0xFF26A69A), Color(0xFF00796B)]),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF26A69A), Color(0xFF00796B)],
+                  ),
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [BoxShadow(color: Colors.teal.withOpacity(0.4), blurRadius: 15, offset: const Offset(0, 8))],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.teal.withOpacity(0.4),
+                      blurRadius: 15,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-                child: const Center(child: Text("Complete Registration", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
+                child: const Center(
+                  child: Text(
+                    "Complete Registration",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -82,20 +178,33 @@ class _MedicalInfoScreenState extends State<MedicalInfoScreen> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(
+    String label,
+    TextEditingController controller,
+    IconData icon, {
+    bool isPassword = false,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10),
+        ],
       ),
       child: TextFormField(
         controller: controller,
         obscureText: isPassword,
-        keyboardType: isPassword ? TextInputType.visiblePassword : TextInputType.text,
-        decoration: InputDecoration(labelText: label, prefixIcon: Icon(icon, color: Colors.teal), border: InputBorder.none),
+        keyboardType: isPassword
+            ? TextInputType.visiblePassword
+            : TextInputType.text,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Colors.teal),
+          border: InputBorder.none,
+        ),
       ),
     );
   }
