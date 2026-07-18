@@ -1,390 +1,381 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
+import 'profile/profile_screen.dart'; // 💡 Profile Screen එක import කරගන්න
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final String firstName;
+  final String weight;
+  final String bloodGroup;
+
+  const DashboardScreen({
+    super.key,
+    required this.firstName,
+    required this.weight,
+    required this.bloodGroup,
+  });
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen>
-    with SingleTickerProviderStateMixin {
+class _DashboardScreenState extends State<DashboardScreen> {
+  // දැනට සිලෙක්ට් වෙලා තියෙන Screen index එක (0 = Home Dashboard)
   int _selectedIndex = 0;
-  late AnimationController _animationController;
+
+  // Navigation එකෙන් මාරු වෙන්න ඕන Screens ලැයිස්තුව
+  late final List<Widget> _screens;
 
   @override
   void initState() {
     super.initState();
-    // FAB එක වටේ Ripple effect එකක් ගන්න Animation Controller එකක් හදනවා
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(); // දිගටම repeat වෙන්න දෙනවා
+    _screens = [
+      _buildDashboardHome(), // index 0: Dashboard ප්‍රධාන පිටුව
+      const Center(
+        child: Text('History Screen', style: TextStyle(fontSize: 20)),
+      ), // index 1
+      const Center(
+        child: Text('Reminder Screen', style: TextStyle(fontSize: 20)),
+      ), // index 2
+      const ProfileScreen(), // index 3: අපේ Profile Screen එක 🚀
+    ];
   }
 
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.lightGrayBg,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. TOP HEADER CARD (Hello Malshan)
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryPurple,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryPurple.withOpacity(0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 28,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            size: 35,
-                            color: AppColors.primaryPurple,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Hello, Malshan!',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '"Your health, our priority"',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 13,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.notifications_none_outlined,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const Divider(color: Colors.white24, height: 1),
-                    const SizedBox(height: 16),
-                    // Metrics Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildHeaderBadge(
-                          Icons.bloodtype_outlined,
-                          "Blood",
-                          "O+",
-                        ),
-                        _buildHeaderBadge(
-                          Icons.scale_outlined,
-                          "Weight",
-                          "72kg",
-                        ),
-                        _buildHeaderBadge(
-                          Icons.favorite_border,
-                          "Status",
-                          "Fit",
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+  // 💡 ප්‍රධාන Dashboard UI එක (Index 0 සඳහා)
+  Widget _buildDashboardHome() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // 1. Top Purple Header Section
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: AppColors.primaryPurple,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32),
+                bottomRight: Radius.circular(32),
               ),
-              const SizedBox(height: 24),
-
-              // 2. MIDDLE SECTION (Confidence + Recent History - Side by Side)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Left Card: Confidence Level
-                  Expanded(
-                    flex: 4,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                          ),
-                        ],
+            ),
+            padding: const EdgeInsets.only(
+              top: 20,
+              bottom: 30,
+              left: 24,
+              right: 24,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const CircleAvatar(
+                      radius: 28,
+                      backgroundColor: AppColors.pureWhite,
+                      child: Icon(
+                        Icons.person,
+                        color: AppColors.textGray,
+                        size: 30,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Confidence Level',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
+                    ),
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, ${widget.firstName}!',
+                          style: const TextStyle(
+                            color: AppColors.pureWhite,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 20),
-                          // Circular Meter
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                width: 90,
-                                height: 90,
-                                child: CircularProgressIndicator(
-                                  value: 0.92, // 92%
-                                  strokeWidth: 8,
-                                  backgroundColor: Colors.grey[200],
-                                  valueColor:
-                                      const AlwaysStoppedAnimation<Color>(
-                                        Colors.teal,
-                                      ),
+                        ),
+                        Text(
+                          '"Your health, our priority"',
+                          style: TextStyle(
+                            color: const Color(0xCCFFFFFF),
+                            fontSize: 13,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    // Notification Bell Icon
+                    IconButton(
+                      icon: const Icon(
+                        Icons.notifications_none,
+                        color: AppColors.pureWhite,
+                        size: 28,
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Medical Info Chips Row (දත්ත dynamic ලෙස වෙනස් වේ)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildInfoChip(
+                      Icons.bloodtype,
+                      'Blood: ${widget.bloodGroup}',
+                    ),
+                    _buildInfoChip(
+                      Icons.monitor_weight,
+                      'Weight: ${widget.weight}kg',
+                    ),
+                    _buildInfoChip(Icons.favorite, 'Status: Fit'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // 2. Middle Content Section (Confidence & History)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Left Card: Confidence Level
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.pureWhite,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Confidence Level',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Circular Progress Chart UI
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: CircularProgressIndicator(
+                                value: 0.92,
+                                strokeWidth: 10,
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.teal,
                                 ),
+                                backgroundColor: Colors.grey[200],
                               ),
-                              const Column(
-                                children: [
-                                  Text(
-                                    '🟢 92%',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.teal,
-                                    ),
+                            ),
+                            const Column(
+                              children: [
+                                Text(
+                                  '92%',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.teal,
                                   ),
-                                  Text(
-                                    'Match',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                    ),
+                                ),
+                                Text(
+                                  'Match',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: AppColors.textGray,
                                   ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        // AI Confidence Green Badge (We fixed py and withOpacity here!)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
                           ),
-                          const SizedBox(height: 20),
-                          Container(
-                            // 💡 py වෙනුවට vertical ලෙස වෙනස් කර ඇත
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.teal.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Text(
+                            'AI Confidence: High',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.teal,
+                              fontWeight: FontWeight.bold,
                             ),
-                            decoration: BoxDecoration(
-                              // 💡 Teal පාට 10% ක opacity එකකින් (ලා පාටක් ලෙස) ලබා දීමට
-                              color: Colors.teal.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+
+                // Right Card: Recent Status History
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.pureWhite,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.03),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Recent Status History',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _buildHistoryItem(
+                          'Amoxicillin 500...',
+                          '96%',
+                          Colors.green,
+                        ),
+                        _buildHistoryItem(
+                          'Paracetamol 50...',
+                          '98%',
+                          Colors.green,
+                        ),
+                        _buildHistoryItem('Vitamin C', '94%', Colors.green),
+                        const SizedBox(height: 12),
+                        Center(
+                          child: TextButton(
+                            onPressed: () {},
                             child: const Text(
-                              'AI Confidence: High',
+                              'See All Scans',
                               style: TextStyle(
-                                fontSize: 11,
-                                color: Colors.teal,
+                                color: AppColors.primaryPurple,
+                                fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 12),
-
-                  // Right Card: Recent Status History
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Recent Status History',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Expanded(
-                            child: ListView(
-                              children: [
-                                _buildHistoryItem(
-                                  "Amoxicillin 500mg",
-                                  "Sep 12 - 7:00 PM",
-                                  "96%",
-                                ),
-                                _buildHistoryItem(
-                                  "Paracetamol 500mg",
-                                  "Sep 11 - 2:30 PM",
-                                  "98%",
-                                ),
-                                _buildHistoryItem(
-                                  "Vitamin C",
-                                  "Sep 10 - 9:15 AM",
-                                  "94%",
-                                ),
-                              ],
-                            ),
-                          ),
-                          Center(
-                            child: TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                'See All Scans',
-                                style: TextStyle(
-                                  color: AppColors.primaryPurple,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 100,
-              ), // FAB එකට ඉඩ තියන්න පල්ලෙහායින් space එකක්
-            ],
+                ),
+              ],
+            ),
           ),
+          const SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+
+  // 💡 Main Scaffold Builder
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.lightGrayBg,
+      // දැනට සිලෙක්ට් වෙලා තියෙන පිටුව body එකට පෙන්වනවා
+      body: SafeArea(child: _screens[_selectedIndex]),
+
+      // 💡 3. Custom Bottom Navigation Bar UI (With floating scan button style)
+      bottomNavigationBar: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: AppColors.pureWhite,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
         ),
-      ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.dashboard, 'Dashboard', 0),
+            _buildNavItem(Icons.history, 'History', 1),
 
-      // 3. FLOATING ACTION BUTTON WITH RIPPLE EFFECT 📸
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              // Ripple Effect 1
-              Container(
-                width: 65 + (_animationController.value * 25),
-                height: 65 + (_animationController.value * 25),
-                decoration: BoxDecoration(
+            // මැද තියෙන රවුම් Scan බටන් එක
+            GestureDetector(
+              onTap: () {
+                // ස්කෑන් කරන්න කැමරාව ඕපන් වන logic එක මෙතනට
+              },
+              child: Container(
+                transform: Matrix4.translationValues(
+                  0,
+                  -10,
+                  0,
+                ), // බටන් එක පොඩ්ඩක් උඩට ගන්න
+                padding: const EdgeInsets.all(14),
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryPurple,
                   shape: BoxShape.circle,
-                  color: AppColors.primaryPurple.withOpacity(
-                    1.0 - _animationController.value,
-                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primaryPurple,
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.document_scanner,
+                  color: AppColors.pureWhite,
+                  size: 28,
                 ),
               ),
-              // Real FAB Button
-              SizedBox(
-                width: 65,
-                height: 65,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    // 💡 කැමරාව ඕපන් කරන්න කෝඩ් එක මෙතනට එන්න ඕනේ
-                  },
-                  backgroundColor: AppColors.primaryPurple,
-                  shape: const CircleBorder(),
-                  elevation: 6,
-                  child: const Icon(
-                    Icons.document_scanner_outlined,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+            ),
 
-      // 4. BOTTOM NAVIGATION BAR WITH A DOCK HOLE
-      bottomNavigationBar: BottomAppBar(
-        shape:
-            const CircularNotchedRectangle(), // FAB එක බහින්න මැදින් Hole එකක් හදනවා
-        notchMargin: 8.0,
-        clipBehavior: Clip.antiAlias,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBottomNavItem(Icons.dashboard, "Dashboard", 0),
-              _buildBottomNavItem(Icons.history, "History", 1),
-              const SizedBox(
-                width: 40,
-              ), // FAB එක තියෙන නිසා මැදින් හිස් ඉඩක් තියනවා
-              _buildBottomNavItem(Icons.add_alert, "Reminder", 2),
-              _buildBottomNavItem(Icons.person, "Profile", 3),
-            ],
-          ),
+            _buildNavItem(Icons.notifications_none, 'Reminder', 2),
+            _buildNavItem(
+              Icons.person_outline,
+              'Profile',
+              3,
+            ), // 👈 Profile Button
+          ],
         ),
       ),
     );
   }
 
-  // --- Helper Widgets to keep code clean ---
-
-  Widget _buildHeaderBadge(IconData icon, String label, String value) {
+  // Helper: Top Info Chips
+  Widget _buildInfoChip(IconData icon, String label) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.pureWhite.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.white, size: 16),
-          const SizedBox(width: 4),
+          Icon(icon, color: AppColors.pureWhite, size: 16),
+          const SizedBox(width: 6),
           Text(
-            "$label: $value",
+            label,
             style: const TextStyle(
-              color: Colors.white,
-              fontSize: 11,
+              color: AppColors.pureWhite,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -393,7 +384,8 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildHistoryItem(String title, String subtitle, String match) {
+  // Helper: History List Item
+  Widget _buildHistoryItem(String title, String percentage, Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
@@ -406,42 +398,29 @@ class _DashboardScreenState extends State<DashboardScreen>
             ),
             child: const Icon(
               Icons.medical_services_outlined,
-              size: 18,
               color: AppColors.primaryPurple,
+              size: 16,
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(fontSize: 9, color: Colors.grey),
-                ),
-              ],
+            child: Text(
+              title,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(4),
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              "🟢 $match",
-              style: const TextStyle(
-                fontSize: 9,
-                color: Colors.green,
+              percentage,
+              style: TextStyle(
+                color: color,
+                fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -451,29 +430,31 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
+  // Helper: Bottom Navigation Item Layout
+  Widget _buildNavItem(IconData icon, String label, int index) {
     final isSelected = _selectedIndex == index;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedIndex = index;
+          _selectedIndex =
+              index; // ක්ලික් කරපු ගමන් index එක අප්ඩේට් වී Screen එක මාරු වේ.
         });
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             icon,
-            color: isSelected ? AppColors.primaryPurple : Colors.grey,
-            size: 26,
+            color: isSelected ? AppColors.primaryPurple : AppColors.textGray,
+            size: 24,
           ),
+          const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.primaryPurple : Colors.grey,
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected ? AppColors.primaryPurple : AppColors.textGray,
             ),
           ),
         ],
