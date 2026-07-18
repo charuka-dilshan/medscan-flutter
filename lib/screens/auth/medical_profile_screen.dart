@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
-import '../dashboard/dashboard_screen.dart'; // 💡 ඔයාගේ dashboard එකට යන්න මේ import එක ඕනේ
+import '../dashboard/dashboard_screen.dart'; // 💡 Dashboard import එක සාර්ථකයි!
 
 class MedicalProfileScreen extends StatefulWidget {
   const MedicalProfileScreen({super.key});
@@ -13,7 +13,7 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
-  
+
   String? _selectedBloodGroup;
 
   // ලේසියෙන් select කරන්න ලෙඩ රෝග ලැයිස්තුව
@@ -22,7 +22,7 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
     'Hypertension (අධික රුධිර පීඩනය)',
     'Heart Disease (හෘද රෝග)',
     'Asthma (ඇදුම)',
-    'None (කිසිවක් නැත)'
+    'None (කිසිවක් නැත)',
   ];
   final List<String> _selectedConditions = [];
 
@@ -32,11 +32,20 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
     'Aspirin',
     'Sulfa Drugs',
     'Peanuts (රටකජු)',
-    'None (කිසිවක් නැත)'
+    'None (කිසිවක් නැත)',
   ];
   final List<String> _selectedAllergies = [];
 
-  final List<String> _bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+  final List<String> _bloodGroups = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-',
+  ];
 
   @override
   void dispose() {
@@ -77,13 +86,18 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                           // Skip කරලා කෙලින්ම Dashboard එකට යන්න
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => const Scaffold(body: Center(child: Text("Dashboard Coming Soon")))),
+                            MaterialPageRoute(
+                              builder: (context) => const DashboardScreen(),
+                            ),
                             (route) => false,
                           );
                         },
                         child: const Text(
                           'Skip',
-                          style: TextStyle(color: AppColors.pureWhite, fontSize: 16),
+                          style: TextStyle(
+                            color: AppColors.pureWhite,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
@@ -99,7 +113,10 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                     const SizedBox(height: 8),
                     const Text(
                       'This helps our AI provide safe recommendations',
-                      style: TextStyle(color: AppColors.pureWhite, fontSize: 13),
+                      style: TextStyle(
+                        color: AppColors.pureWhite,
+                        fontSize: 13,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 25),
@@ -115,7 +132,7 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                             color: Colors.black.withOpacity(0.05),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
-                          )
+                          ),
                         ],
                       ),
                       child: Form(
@@ -142,11 +159,22 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                     keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
                                       labelText: 'Height (cm)',
-                                      labelStyle: TextStyle(color: AppColors.textGray),
-                                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                      labelStyle: TextStyle(
+                                        color: AppColors.textGray,
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.textGray,
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.primaryPurple,
+                                        ),
+                                      ),
                                     ),
-                                    validator: (value) => value!.isEmpty ? 'Enter height' : null,
+                                    validator: (value) =>
+                                        value!.isEmpty ? 'Enter height' : null,
                                   ),
                                 ),
                                 const SizedBox(width: 20),
@@ -156,11 +184,22 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                     keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
                                       labelText: 'Weight (kg)',
-                                      labelStyle: TextStyle(color: AppColors.textGray),
-                                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                      labelStyle: TextStyle(
+                                        color: AppColors.textGray,
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.textGray,
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.primaryPurple,
+                                        ),
+                                      ),
                                     ),
-                                    validator: (value) => value!.isEmpty ? 'Enter weight' : null,
+                                    validator: (value) =>
+                                        value!.isEmpty ? 'Enter weight' : null,
                                   ),
                                 ),
                               ],
@@ -170,9 +209,16 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                             // Blood Group Dropdown
                             DropdownButtonFormField<String>(
                               value: _selectedBloodGroup,
-                              hint: const Text('Select Blood Group', style: TextStyle(color: AppColors.textGray)),
+                              hint: const Text(
+                                'Select Blood Group',
+                                style: TextStyle(color: AppColors.textGray),
+                              ),
                               decoration: const InputDecoration(
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
                               ),
                               items: _bloodGroups.map((group) {
                                 return DropdownMenuItem(
@@ -185,23 +231,37 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                   _selectedBloodGroup = value;
                                 });
                               },
-                              validator: (value) => value == null ? 'Select blood group' : null,
+                              validator: (value) =>
+                                  value == null ? 'Select blood group' : null,
                             ),
                             const SizedBox(height: 24),
 
                             // Medical Conditions Chips
                             const Text(
                               'Do you have any of these conditions?',
-                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 8.0,
                               runSpacing: 4.0,
                               children: _medicalConditions.map((condition) {
-                                final isSelected = _selectedConditions.contains(condition);
+                                final isSelected = _selectedConditions.contains(
+                                  condition,
+                                );
                                 return FilterChip(
-                                  label: Text(condition, style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : Colors.black87)),
+                                  label: Text(
+                                    condition,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black87,
+                                    ),
+                                  ),
                                   selected: isSelected,
                                   selectedColor: AppColors.primaryPurple,
                                   checkmarkColor: Colors.white,
@@ -212,7 +272,9 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                         if (condition == 'None (කිසිවක් නැත)') {
                                           _selectedConditions.clear();
                                         } else {
-                                          _selectedConditions.remove('None (කිසිවක් නැත)');
+                                          _selectedConditions.remove(
+                                            'None (කිසිවක් නැත)',
+                                          );
                                         }
                                         _selectedConditions.add(condition);
                                       } else {
@@ -228,16 +290,29 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                             // Allergies Chips
                             const Text(
                               'Do you have any drug/food allergies?',
-                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 8.0,
                               runSpacing: 4.0,
                               children: _allergies.map((allergy) {
-                                final isSelected = _selectedAllergies.contains(allergy);
+                                final isSelected = _selectedAllergies.contains(
+                                  allergy,
+                                );
                                 return FilterChip(
-                                  label: Text(allergy, style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : Colors.black87)),
+                                  label: Text(
+                                    allergy,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black87,
+                                    ),
+                                  ),
                                   selected: isSelected,
                                   selectedColor: AppColors.primaryPurple,
                                   checkmarkColor: Colors.white,
@@ -248,7 +323,9 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                         if (allergy == 'None (කිසිවක් නැත)') {
                                           _selectedAllergies.clear();
                                         } else {
-                                          _selectedAllergies.remove('None (කිසිවක් නැත)');
+                                          _selectedAllergies.remove(
+                                            'None (කිසිවක් නැත)',
+                                          );
                                         }
                                         _selectedAllergies.add(allergy);
                                       } else {
@@ -268,22 +345,29 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryPurple,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  foregroundColor: AppColors.pureWhite, // 💡 මෙන්න මේක දැම්මාම බටන් text එක අනිවාර්යයෙන්ම සුදු වෙනවා
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
                                     // 💡 මෙතනදී දත්ත ටික database එකට දාන්න පුළුවන්
-                                    // වැඩේ ඉවර වෙලා Dashboard එකට යන්න:
                                     Navigator.pushAndRemoveUntil(
                                       context,
-                                      MaterialPageRoute(builder: (context) => const Scaffold(body: Center(child: Text("Dashboard Coming Soon")))),
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DashboardScreen(),
+                                      ),
                                       (route) => false,
                                     );
                                   }
                                 },
                                 child: const Text(
                                   'SAVE & CONTINUE',
-                                  style: TextStyle(color: AppColors.pureWhite, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
@@ -296,7 +380,7 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
