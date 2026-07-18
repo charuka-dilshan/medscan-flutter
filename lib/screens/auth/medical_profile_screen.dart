@@ -85,7 +85,15 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const DashboardScreen(),
+                              builder: (context) => DashboardScreen(
+                                firstName:
+                                    "Nadeesha", // 👈 දැනට නම විදිහට මේක දෙන්න (නැත්නම් ඔයා ළඟ variable එකක් තියෙනවා නම් ඒක දාන්න)
+                                weight: _weightController.text.isNotEmpty
+                                    ? _weightController.text
+                                    : "0",
+                                bloodGroup:
+                                    _selectedBloodGroup ?? "Not Specified",
+                              ),
                             ),
                             (route) => false,
                           );
@@ -355,8 +363,17 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                     Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const DashboardScreen(),
+                                        builder: (context) => DashboardScreen(
+                                          firstName:
+                                              "Nadeesha", // 👈 දැනට නම විදිහට මේක දෙන්න (නැත්නම් ඔයා ළඟ variable එකක් තියෙනවා නම් ඒක දාන්න)
+                                          weight:
+                                              _weightController.text.isNotEmpty
+                                              ? _weightController.text
+                                              : "0",
+                                          bloodGroup:
+                                              _selectedBloodGroup ??
+                                              "Not Specified",
+                                        ),
                                       ),
                                       (route) => false,
                                     );
