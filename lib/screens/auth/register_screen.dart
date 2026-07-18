@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // 💡 pubspec.yaml එකට intl දැම්මාට පස්සේ මේක වැඩ
 import '../../theme/app_colors.dart';
+import 'medical_profile_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -31,7 +32,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now().subtract(const Duration(days: 365 * 18)), // default to 18 years ago
+      initialDate: DateTime.now().subtract(
+        const Duration(days: 365 * 18),
+      ), // default to 18 years ago
       firstDate: DateTime(1930),
       lastDate: DateTime.now(),
       builder: (context, child) {
@@ -75,23 +78,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
-                    // Title
-                    const Text(
-                      'MedScan AI',
-                      style: TextStyle(
-                        color: AppColors.pureWhite,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    const SizedBox(height: 40),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.health_and_safety,
+                          color: AppColors.pureWhite,
+                          size: 36,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'MedScan AI',
+                          style: TextStyle(
+                            color: AppColors.pureWhite,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       'Fill The Below information to Register',
-                      style: TextStyle(color: AppColors.pureWhite, fontSize: 14),
+                      style: TextStyle(
+                        color: AppColors.pureWhite,
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 20),
-                    
+
                     // Main White Form Card
                     Container(
                       padding: const EdgeInsets.all(24),
@@ -103,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             color: Colors.black.withOpacity(0.05),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
-                          )
+                          ),
                         ],
                       ),
                       child: Form(
@@ -122,63 +138,111 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            
+
                             // First Name Field
                             TextFormField(
                               controller: _firstNameController,
                               textCapitalization: TextCapitalization.words,
                               decoration: const InputDecoration(
                                 labelText: 'User First Name',
-                                labelStyle: TextStyle(color: AppColors.textGray),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                labelStyle: TextStyle(
+                                  color: AppColors.textGray,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.primaryPurple,
+                                  ),
+                                ),
                               ),
-                              validator: (value) => value!.isEmpty ? 'Enter your first name' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Enter your first name'
+                                  : null,
                             ),
                             const SizedBox(height: 12),
-                            
+
                             // Last Name Field
                             TextFormField(
                               controller: _lastNameController,
                               textCapitalization: TextCapitalization.words,
                               decoration: const InputDecoration(
                                 labelText: 'User Last Name',
-                                labelStyle: TextStyle(color: AppColors.textGray),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                labelStyle: TextStyle(
+                                  color: AppColors.textGray,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.primaryPurple,
+                                  ),
+                                ),
                               ),
-                              validator: (value) => value!.isEmpty ? 'Enter your last name' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Enter your last name'
+                                  : null,
                             ),
                             const SizedBox(height: 12),
-                            
+
                             // Phone Number Field
                             TextFormField(
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
                               decoration: const InputDecoration(
                                 labelText: 'User Phone Number',
-                                labelStyle: TextStyle(color: AppColors.textGray),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                labelStyle: TextStyle(
+                                  color: AppColors.textGray,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.primaryPurple,
+                                  ),
+                                ),
                               ),
-                              validator: (value) => value!.isEmpty ? 'Enter your phone number' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Enter your phone number'
+                                  : null,
                             ),
                             const SizedBox(height: 12),
-                            
+
                             // Password Field
                             TextFormField(
                               controller: _passwordController,
                               obscureText: true,
                               decoration: const InputDecoration(
                                 labelText: 'Password',
-                                labelStyle: TextStyle(color: AppColors.textGray),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                labelStyle: TextStyle(
+                                  color: AppColors.textGray,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.primaryPurple,
+                                  ),
+                                ),
                               ),
-                              validator: (value) => value!.length < 6 ? 'Password must be 6+ characters' : null,
+                              validator: (value) => value!.length < 6
+                                  ? 'Password must be 6+ characters'
+                                  : null,
                             ),
                             const SizedBox(height: 12),
-                            
+
                             // Birthday Field with DatePicker Triger
                             TextFormField(
                               controller: _birthdayController,
@@ -186,15 +250,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onTap: () => _selectDate(context),
                               decoration: const InputDecoration(
                                 labelText: 'Birthday (DD/MM/YYYY)',
-                                labelStyle: TextStyle(color: AppColors.textGray),
-                                suffixIcon: Icon(Icons.calendar_today, color: AppColors.textGray, size: 20),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.textGray)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primaryPurple)),
+                                labelStyle: TextStyle(
+                                  color: AppColors.textGray,
+                                ),
+                                suffixIcon: Icon(
+                                  Icons.calendar_today,
+                                  color: AppColors.textGray,
+                                  size: 20,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppColors.primaryPurple,
+                                  ),
+                                ),
                               ),
-                              validator: (value) => value!.isEmpty ? 'Select your birthday' : null,
+                              validator: (value) => value!.isEmpty
+                                  ? 'Select your birthday'
+                                  : null,
                             ),
                             const SizedBox(height: 24),
-                            
+
                             // Register Button
                             SizedBox(
                               width: double.infinity,
@@ -202,16 +282,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryPurple,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    // Handle Registration Logic
+                                    // Register උනාට පස්සේ කෙලින්ම Medical Profile screen එකට යනවා
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MedicalProfileScreen(),
+                                      ),
+                                    );
                                   }
                                 },
                                 child: const Text(
                                   'REGISTER',
-                                  style: TextStyle(color: AppColors.pureWhite, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                    color: AppColors.pureWhite,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
@@ -220,27 +312,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
+
                     // Already have an account text
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Already have an account? ", style: TextStyle(color: Colors.black54)),
-                        GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: const Text(
-                            'LOG IN',
-                            style: TextStyle(color: AppColors.primaryPurple, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      "Already have an account? ",
+                      style: TextStyle(color: Colors.black54),
                     ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Text(
+                        'LOG IN',
+                        style: TextStyle(
+                          color: AppColors.primaryPurple,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
