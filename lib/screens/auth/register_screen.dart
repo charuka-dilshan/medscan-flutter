@@ -144,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               controller: _firstNameController,
                               textCapitalization: TextCapitalization.words,
                               decoration: const InputDecoration(
-                                labelText: 'User First Name',
+                                labelText: 'First Name',
                                 labelStyle: TextStyle(
                                   color: AppColors.textGray,
                                 ),
@@ -170,7 +170,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               controller: _lastNameController,
                               textCapitalization: TextCapitalization.words,
                               decoration: const InputDecoration(
-                                labelText: 'User Last Name',
+                                labelText: 'Last Name',
                                 labelStyle: TextStyle(
                                   color: AppColors.textGray,
                                 ),
@@ -196,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
                               decoration: const InputDecoration(
-                                labelText: 'User Phone Number',
+                                labelText: 'Phone Number',
                                 labelStyle: TextStyle(
                                   color: AppColors.textGray,
                                 ),
@@ -237,8 +237,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                               ),
-                              validator: (value) => value!.length < 6
-                                  ? 'Password must be 6+ characters'
+                              validator: (value) => value!.length < 8
+                                  ? 'Password must be 8+ characters'
                                   : null,
                             ),
                             const SizedBox(height: 12),

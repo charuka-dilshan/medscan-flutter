@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
-import '../dashboard/dashboard_screen.dart'; // 💡 Dashboard import එක සාර්ථකයි!
+import '../dashboard/dashboard_screen.dart';
 
 class MedicalProfileScreen extends StatefulWidget {
   const MedicalProfileScreen({super.key});
@@ -16,7 +16,6 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
 
   String? _selectedBloodGroup;
 
-  // ලේසියෙන් select කරන්න ලෙඩ රෝග ලැයිස්තුව
   final List<String> _medicalConditions = [
     'Diabetes (දියවැඩියාව)',
     'Hypertension (අධික රුධිර පීඩනය)',
@@ -26,7 +25,6 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
   ];
   final List<String> _selectedConditions = [];
 
-  // අසාත්මිකතා ලැයිස්තුව (Allergies)
   final List<String> _allergies = [
     'Penicillin',
     'Aspirin',
@@ -83,7 +81,7 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                       alignment: Alignment.topRight,
                       child: TextButton(
                         onPressed: () {
-                          // Skip කරලා කෙලින්ම Dashboard එකට යන්න
+                          //skip and navigate to dashboard
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
@@ -345,7 +343,8 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryPurple,
-                                  foregroundColor: AppColors.pureWhite, // 💡 මෙන්න මේක දැම්මාම බටන් text එක අනිවාර්යයෙන්ම සුදු වෙනවා
+                                  foregroundColor: AppColors
+                                      .pureWhite, // 💡 මෙන්න මේක දැම්මාම බටන් text එක අනිවාර්යයෙන්ම සුදු වෙනවා
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(24),
                                   ),
@@ -365,9 +364,7 @@ class _MedicalProfileScreenState extends State<MedicalProfileScreen> {
                                 },
                                 child: const Text(
                                   'SAVE & CONTINUE',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),

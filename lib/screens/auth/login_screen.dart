@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _phoneController,
                               keyboardType: TextInputType.phone,
                               decoration: const InputDecoration(
-                                labelText: 'User Phone Number',
+                                labelText: 'Phone Number',
                                 labelStyle: TextStyle(color: AppColors.textGray),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: AppColors.textGray),
