@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
-import 'profile/profile_screen.dart'; // 💡 Profile Screen එක import කරගන්න
+import 'profile/profile_screen.dart';
+import '../history/history_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String firstName;
@@ -29,14 +30,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _screens = [
-      _buildDashboardHome(), // index 0: Dashboard ප්‍රධාන පිටුව
-      const Center(
-        child: Text('History Screen', style: TextStyle(fontSize: 20)),
-      ), // index 1
-      const Center(
-        child: Text('Reminder Screen', style: TextStyle(fontSize: 20)),
-      ), // index 2
-      const ProfileScreen(), // index 3: අපේ Profile Screen එක 🚀
+      _buildDashboardHome(), // index 0
+      const HistoryScreen(), // 👈 index 1: Center එක වෙනුවට අපේ අලුත් Screen එක දැම්මා!
+      const Center(child: Text('Reminder Screen')), // index 2
+      const ProfileScreen(), // index 3
     ];
   }
 
