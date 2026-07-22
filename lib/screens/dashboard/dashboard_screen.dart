@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import 'profile/profile_screen.dart';
 import '../history/history_screen.dart';
+import '../schedule/reminder_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String firstName;
@@ -23,6 +24,197 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // දැනට සිලෙක්ට් වෙලා තියෙන Screen index එක (0 = Home Dashboard)
   int _selectedIndex = 0;
 
+  // -------------------------------------------------------------
+  // ⏰ Add Reminder Bottom Sheet Method
+  // -------------------------------------------------------------
+  void _showAddReminderBottomSheet(BuildContext context) {
+    TimeOfDay selectedTime = TimeOfDay.now();
+    final TextEditingController titleController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                top: 20,
+                left: 20,
+                right: 20,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Add New Reminder',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      labelText: 'Reminder Title (e.g., Panadol 500mg)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      prefixIcon: const Icon(Icons.medication),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time, color: Colors.blue),
+                            const SizedBox(width: 12),
+                            Text(
+                              'Time: ${selectedTime.format(context)}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final TimeOfDay? time = await showTimePicker(
+                              context: context,
+                              initialTime: selectedTime,
+                            );
+                            if (time != null) {
+                              setModalState(() {
+                                selectedTime = time;
+                              });
+                            }
+                          },
+                          child: const Text('Change Time'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (titleController.text.isNotEmpty) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Reminder set for ${titleController.text} at ${selectedTime.format(context)}',
+                              ),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Set Reminder',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // -------------------------------------------------------------
+  // 🔔 Quick Add Reminder Card Widget
+  // -------------------------------------------------------------
+  Widget _buildAddReminderQuickCard(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        onTap: () => _showAddReminderBottomSheet(context),
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.add_alarm, color: Colors.blue, size: 28),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Set Quick Reminder',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Tap to schedule medicine or checkup time',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: Colors.grey),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   // Navigation එකෙන් මාරු වෙන්න ඕන Screens ලැයිස්තුව
   late final List<Widget> _screens;
 
@@ -31,8 +223,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     _screens = [
       _buildDashboardHome(), // index 0
-      const HistoryScreen(), // 👈 index 1: Center එක වෙනුවට අපේ අලුත් Screen එක දැම්මා!
-      const Center(child: Text('Reminder Screen')), // index 2
+      const HistoryScreen(), // index 1
+      const ReminderScreen(), // index 2
       const ProfileScreen(), // index 3
     ];
   }
@@ -83,10 +275,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
+                        const Text(
                           '"Your health, our priority"',
                           style: TextStyle(
-                            color: const Color(0xCCFFFFFF),
+                            color: Color(0xCCFFFFFF),
                             fontSize: 13,
                             fontStyle: FontStyle.italic,
                           ),
@@ -107,7 +299,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                // Medical Info Chips Row (දත්ත dynamic ලෙස වෙනස් වේ)
+                // Medical Info Chips Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -126,7 +318,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
+
+          // -------------------------------------------------------------
+          // 📌 Quick Reminder Card එක මෙතනට එකතු කළා!
+          // -------------------------------------------------------------
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: _buildAddReminderQuickCard(context),
+          ),
+
+          const SizedBox(height: 20),
 
           // 2. Middle Content Section (Confidence & History)
           Padding(
@@ -197,7 +399,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        // AI Confidence Green Badge (We fixed py and withOpacity here!)
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
@@ -291,10 +492,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightGrayBg,
-      // දැනට සිලෙක්ට් වෙලා තියෙන පිටුව body එකට පෙන්වනවා
       body: SafeArea(child: _screens[_selectedIndex]),
 
-      // 💡 3. Custom Bottom Navigation Bar UI (With floating scan button style)
+      // 💡 Bottom Navigation Bar UI
       bottomNavigationBar: Container(
         height: 70,
         decoration: BoxDecoration(
@@ -313,17 +513,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _buildNavItem(Icons.dashboard, 'Dashboard', 0),
             _buildNavItem(Icons.history, 'History', 1),
 
-            // මැද තියෙන රවුම් Scan බටන් එක
+            // Scan Button
             GestureDetector(
               onTap: () {
-                // ස්කෑන් කරන්න කැමරාව ඕපන් වන logic එක මෙතනට
+                // Scan Logic
               },
               child: Container(
-                transform: Matrix4.translationValues(
-                  0,
-                  -10,
-                  0,
-                ), // බටන් එක පොඩ්ඩක් උඩට ගන්න
+                transform: Matrix4.translationValues(0, -10, 0),
                 padding: const EdgeInsets.all(14),
                 decoration: const BoxDecoration(
                   color: AppColors.primaryPurple,
@@ -345,11 +541,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
 
             _buildNavItem(Icons.notifications_none, 'Reminder', 2),
-            _buildNavItem(
-              Icons.person_outline,
-              'Profile',
-              3,
-            ), // 👈 Profile Button
+            _buildNavItem(Icons.person_outline, 'Profile', 3),
           ],
         ),
       ),
@@ -433,8 +625,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedIndex =
-              index; // ක්ලික් කරපු ගමන් index එක අප්ඩේට් වී Screen එක මාරු වේ.
+          _selectedIndex = index;
         });
       },
       child: Column(
