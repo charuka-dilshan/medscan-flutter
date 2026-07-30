@@ -3,6 +3,7 @@ import '../../theme/app_colors.dart';
 import 'profile/profile_screen.dart';
 import '../history/history_screen.dart';
 import '../schedule/reminder_screen.dart';
+import '../scan/scan_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String firstName;
@@ -185,7 +186,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: Colors.blue.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.add_alarm, color: Colors.blue, size: 28),
+                child: const Icon(
+                  Icons.add_alarm,
+                  color: Colors.blue,
+                  size: 28,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -516,7 +521,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Scan Button
             GestureDetector(
               onTap: () {
-                // Scan Logic
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const ScanScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                          // Slide & Fade Animation
+                          const begin = Offset(
+                            0.0,
+                            1.0,
+                          ); // යට ඉඳන් උඩට එන Animation එක
+                          const end = Offset.zero;
+                          const curve = Curves.easeOutCubic;
+
+                          var tween = Tween(
+                            begin: begin,
+                            end: end,
+                          ).chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            ),
+                          );
+                        },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                );
               },
               child: Container(
                 transform: Matrix4.translationValues(0, -10, 0),
