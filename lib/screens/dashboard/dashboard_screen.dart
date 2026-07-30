@@ -3,6 +3,7 @@ import '../../theme/app_colors.dart';
 import 'profile/profile_screen.dart';
 import '../history/history_screen.dart';
 import '../schedule/reminder_screen.dart';
+import '../scan/scan_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String firstName;
@@ -20,7 +21,8 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen>
+    with TickerProviderStateMixin {
   // දැනට සිලෙක්ට් වෙලා තියෙන Screen index එක (0 = Home Dashboard)
   int _selectedIndex = 0;
 
@@ -185,7 +187,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: Colors.blue.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.add_alarm, color: Colors.blue, size: 28),
+                child: const Icon(
+                  Icons.add_alarm,
+                  color: Colors.blue,
+                  size: 28,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -217,16 +223,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // Navigation එකෙන් මාරු වෙන්න ඕන Screens ලැයිස්තුව
   late final List<Widget> _screens;
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.25).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
     _screens = [
       _buildDashboardHome(), // index 0
       const HistoryScreen(), // index 1
       const ReminderScreen(), // index 2
       const ProfileScreen(), // index 3
     ];
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose(); // Memory leaks නවත්තන්න dispose කිරීම
+    super.dispose();
   }
 
   // 💡 ප්‍රධාන Dashboard UI එක (Index 0 සඳහා)
@@ -516,27 +539,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Scan Button
             GestureDetector(
               onTap: () {
-                // Scan Logic
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const ScanScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                  ),
+                );
               },
-              child: Container(
-                transform: Matrix4.translationValues(0, -10, 0),
-                padding: const EdgeInsets.all(14),
-                decoration: const BoxDecoration(
-                  color: AppColors.primaryPurple,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryPurple,
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
+              child: AnimatedBuilder(
+                animation: _pulseAnimation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _pulseAnimation.value,
+                    child: Container(
+                      transform: Matrix4.translationValues(0, -10, 0),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryPurple,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primaryPurple.withOpacity(0.6),
+                            blurRadius: 12 * _pulseAnimation.value,
+                            spreadRadius: 3 * _pulseAnimation.value,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.document_scanner,
+                        color: AppColors.pureWhite,
+                        size: 28,
+                      ),
                     ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.document_scanner,
-                  color: AppColors.pureWhite,
-                  size: 28,
-                ),
+                  );
+                },
               ),
             ),
 
