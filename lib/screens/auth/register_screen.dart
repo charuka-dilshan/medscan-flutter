@@ -237,8 +237,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                 ),
                               ),
-                              validator: (value) => value!.length < 8
-                                  ? 'Password must be 8+ characters'
+                              validator: (value) => value!.length < 6
+                                  ? 'Password must be 6+ characters'
                                   : null,
                             ),
                             const SizedBox(height: 12),
